@@ -17,18 +17,12 @@ def readTab(toRead):
     with open(toRead, 'r') as tab:
         #Read the first line in the file, should start with #CHR.
         line = tab.readline()
-        if (not line.startswith("#CHR")):
-            print('TAB file is not in correct format')
-            return None
-        else:
-            print('TAB file seems ok, continuing read')
-
         #Read the second line and create the first Chromosome object.
         #All following lines should be formatted as: chrName\tstart\tend\tcoverage
         line = tab.readline()
         fields = line.split('\t')
-        if (not len(fields) == 4):
-            print("TAB file not formatted correctly on line 2")
+        if (len(fields) < 4 ):
+            print("Too few tab fields")
             return None
         else:
             curChrName = fields[0]
@@ -81,11 +75,6 @@ def readCytoTab(toRead):
 
 		#Read the first line in the file, should start with #chromosome.
         line = tab.readline()
-        if (not line.startswith("chr1")):
-            print('TAB file is not in correct format')
-            return None
-        else:
-            print('CytoBandTAB file seems ok, continuing read')
         #The fields are as following: #chromosome, startPos, endPos, cytoband, stain value
         fields = line.split('\t')
         fields[0] = fields[0].strip('chr')
