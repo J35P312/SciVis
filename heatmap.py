@@ -36,6 +36,7 @@ class HeatmapView(QGraphicsView):
         self.resize(QDesktopWidget().availableGeometry(self).size())
         self.show()
         self.clearScene()
+        self.containerRect = QRect(QPoint(50,50), QPoint(self.size().width()-50,self.size().height()-50))
         self.createHeatmap(self.chromoA, self.chromoB, self.binSize, self.mapping)
         self.scale(0.7, 0.7)
 
@@ -154,7 +155,7 @@ class HeatmapView(QGraphicsView):
         self.chDia.layout = QGridLayout(self.chDia)
         self.chDia.layout.addWidget(self.chList,0,0,1,4)
         self.chDia.layout.addWidget(viewVarButton,1,0,1,1)
-        self.chDia.layout.addWidget(addVariantButton,1,1,1,1)
+        #self.chDia.layout.addWidget(addVariantButton,1,1,1,1)
         self.chDia.setMinimumSize(450,400)
         self.chDia.show()
 
@@ -181,7 +182,7 @@ class HeatmapView(QGraphicsView):
         chromoInfoLayout = QGridLayout()
         chromoInfoLayout.addWidget(self.chList,0,0,1,2)
         chromoInfoLayout.addWidget(viewVarButton,1,0,1,1)
-        chromoInfoLayout.addWidget(addVariantButton,1,1,1,1)
+        #chromoInfoLayout.addWidget(addVariantButton,1,1,1,1)
         chromoWidget = QWidget()
         chromoWidget.setLayout(chromoInfoLayout)
         return chromoWidget
@@ -240,21 +241,21 @@ class HeatmapView(QGraphicsView):
             endString = "End position"
         size = self.size()
 
-        containerRect = QRect(QPoint(50,50), QPoint(size.width()-50,size.height()-50))
+        
         #create and add axes to scene
         xAxisPath = QPainterPath()
-        xAxisPath.moveTo(50,containerRect.height()-50)
-        xAxisPath.lineTo(containerRect.width()-250, containerRect.height()-50)
+        xAxisPath.moveTo(50,self.containerRect.height()-50)
+        xAxisPath.lineTo(self.containerRect.width()-250, self.containerRect.height()-50)
         xAxisItem = QGraphicsPathItem(xAxisPath)
         yAxisPath = QPainterPath()
-        yAxisPath.moveTo(50,containerRect.height()-50)
+        yAxisPath.moveTo(50,self.containerRect.height()-50)
         yAxisPath.lineTo(50, 50)
         yAxisItem = QGraphicsPathItem(yAxisPath)
         xAxisPath.moveTo(50, 50)
-        xAxisPath.lineTo(containerRect.width()-250, 50)
+        xAxisPath.lineTo(self.containerRect.width()-250, 50)
         xAxisItemTop = QGraphicsPathItem(xAxisPath)
-        yAxisPath.moveTo(containerRect.width()-250, containerRect.height()-50)
-        yAxisPath.lineTo(containerRect.width()-250, 50)
+        yAxisPath.moveTo(self.containerRect.width()-250, self.containerRect.height()-50)
+        yAxisPath.lineTo(self.containerRect.width()-250, 50)
         yAxisItemRight = QGraphicsPathItem(yAxisPath)
         self.graphArea = QGraphicsRectItem(QRectF(yAxisItem.boundingRect().topLeft(), xAxisItem.boundingRect().bottomRight()))
         self.scene.addItem(self.graphArea)

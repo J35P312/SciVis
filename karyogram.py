@@ -29,6 +29,7 @@ class KaryogramView(QGraphicsView):
         self.show()
         self.createSettings()
         self.createChInfo()
+        self.containerRect = QRect(QPoint(50,50), QPoint(self.size().width()-50,self.size().height()-50))
 
     def returnActiveDataset(self):
         return self.dataDict
@@ -150,9 +151,9 @@ class KaryogramView(QGraphicsView):
         #Button for toggling display of selected chromosomes in the scene
         togButton = QPushButton('Toggle display', self.chDia)
         togButton.clicked.connect(self.toggleDisp)
-        #Button for viewing selected chromosome selectedVariants
-        viewVarButton = QPushButton('View selectedVariants', self.chDia)
-        viewVarButton.clicked.connect(self.viewselectedVariants)
+        #Button for viewing selected chromosome variants
+        viewVarButton = QPushButton('View variants', self.chDia)
+        viewVarButton.clicked.connect(self.viewVariants)
         #Button for toggling connections
         connButton = QPushButton('Toggle connections', self.chDia)
         connButton.clicked.connect(self.toggleConnections)
@@ -223,14 +224,14 @@ class KaryogramView(QGraphicsView):
             chromo = self.chromosomes[row]
             viewVarDia = common.createVariantDia(chromo,self)
             #Also connect toggle button in the widget to update scene
-            viewVarDia.layout.itemAtPosition(2,0).widget().clicked.connect(self.updateItems)
+            viewVarDia.layout.itemAtPosition(1,0).widget().clicked.connect(self.updateItems)
             viewVarDia.show()
 
     def createVariantWidget(self,row):
         chromo = self.chromosomes[row]
         varWidget = common.createVariantWidget(chromo)
         #Also connect toggle button in the widget to update scene
-        varWidget.layout().itemAtPosition(2,0).widget().clicked.connect(self.updateItems)
+        varWidget.layout().itemAtPosition(1,0).widget().clicked.connect(self.updateItems)
         return varWidget
 
     def addVariant(self):
@@ -388,8 +389,6 @@ class KaryogramView(QGraphicsView):
     def createChromosomeItems(self):
         if self.numDispChromos > 0:
 
-            size = self.size()
-            containerRect = QRect(QPoint(50,50), QPoint(size.width()-50,size.height()-50))
             #find the maximum displayed chromosome length, and let this be 100% of item length
             maxBp = 0
             for chromo in self.chromosomes:
@@ -400,8 +399,8 @@ class KaryogramView(QGraphicsView):
 
             #Lays out items vetically with equal spacing between each other, with a width depending on screen size
             currentXPosition = 0
-            xIncrement = (containerRect.width() / self.numDispChromos) + 60
-            self.chromoWidth = containerRect.width() / 48
+            xIncrement = (self.containerRect.width() / self.numDispChromos) + 60
+            self.chromoWidth = self.containerRect.width() / 48
             counter = 0
             numRows = math.ceil(24 / self.itemsPerRow)
             displaceY = 0
@@ -411,7 +410,7 @@ class KaryogramView(QGraphicsView):
             for chromo in self.chromosomes:
                 if not chromo.display or "GL" in chromo.name or "MT" in chromo.name:
                     continue
-                chromoHeight = (int(chromo.end)/maxBp)*(containerRect.height())
+                chromoHeight = (int(chromo.end)/maxBp)*(self.containerRect.height())
                 if chromoHeight > longestItemInRow:
                     longestItemInRow = chromoHeight
                 bandItems = []

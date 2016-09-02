@@ -296,7 +296,7 @@ class CircView(QGraphicsView):
         self.chDia.layout.addWidget(self.chList,0,0,1,4)
         self.chDia.layout.addWidget(togButton,1,0,1,1)
         self.chDia.layout.addWidget(viewVarButton,1,1,1,1)
-        self.chDia.layout.addWidget(addVariantButton,1,2,1,1)
+        #self.chDia.layout.addWidget(addVariantButton,1,2,1,1)
         self.chDia.layout.addWidget(connButton,1,3,1,1)
         self.chDia.setMinimumSize(500,400)
         self.chDia.show()
@@ -334,7 +334,7 @@ class CircView(QGraphicsView):
         chromoInfoLayout.addWidget(togButton,1,0,1,1)
         chromoInfoLayout.addWidget(connButton,1,1,1,1)
         chromoInfoLayout.addWidget(viewVarButton,1,2,1,1)
-        chromoInfoLayout.addWidget(addVariantButton,1,3,1,1)
+        #chromoInfoLayout.addWidget(addVariantButton,1,3,1,1)
         chromoWidget = QWidget()
         chromoWidget.setLayout(chromoInfoLayout)
         return chromoWidget
@@ -350,14 +350,14 @@ class CircView(QGraphicsView):
             chromo = self.chromosomes[row]
             viewVarDia = common.createVariantDia(chromo,self)
             #Also connect toggle button in the widget to update scene
-            viewVarDia.layout.itemAtPosition(2,0).widget().clicked.connect(self.initscene)
+            viewVarDia.layout.itemAtPosition(1,0).widget().clicked.connect(self.initscene)
             viewVarDia.show()
 
     def createVariantWidget(self,row):
         chromo = self.chromosomes[row]
         varWidget = common.createVariantWidget(chromo)
         #Also connect toggle button in the widget to update scene
-        varWidget.layout().itemAtPosition(2,0).widget().clicked.connect(self.initscene)
+        varWidget.layout().itemAtPosition(1,0).widget().clicked.connect(self.initscene)
         return varWidget
 
     def addVariant(self):
@@ -887,15 +887,22 @@ class CircView(QGraphicsView):
                     curAngle_B = self.chromosome_angle_list[chrB.name][0]
                     #The windows of each variant (WINA, WINB) are used to determine where on the chromosome the interaction is located
                     #If chrA higher in order than chrB, WINA and WINB are switched, so check this first
-                    if self.chromosomes.index(chrA) > self.chromosomes.index(chrB):
-                        bp_End_A = int(variant[3])
-                        chrA_length = int(chrA.end)
-                        bp_End_B = int(variant[1])
-                        chrB_length = int(chrB.end)
+                    if "WINA" in variant[5]:
+                        
+                        if self.chromosomes.index(chrA) > self.chromosomes.index(chrB):
+                            bp_End_A = int(variant[5]["WINB"].split(',')[1])
+                            chrA_length = int(chrA.end)
+                            bp_End_B = int(variant[5]["WINA"].split(',')[1])
+                            chrB_length = int(chrB.end)
+                        else:
+                            bp_End_A = int(variant[5]["WINA"].split(',')[1])
+                            chrA_length = int(chrA.end)
+                            bp_End_B = int(variant[5]["WINB"].split(',')[1])
+                            chrB_length = int(chrB.end)
                     else:
-                        bp_End_A = int(variant[1])
+                        bp_End_A = variant[1]
                         chrA_length = int(chrA.end)
-                        bp_End_B = int(variant[3])
+                        bp_End_B = variant[3]
                         chrB_length = int(chrB.end)
                     #A percentage of the total angle (used to draw the chromosome in makeItems) determines where on the
                     #chromosome the connection is located
