@@ -39,7 +39,7 @@ def readTab(toRead):
         #Iterate over the rest of the lines in the file
         for line in tab:
             fields = line.split('\t')
-            if (not len(fields) == 4):
+            if (len(fields) < 4):
                 print("TAB file not formatted correctly")
                 return -1
             #If we come across a new chromosome, assign end on current chromosome (contained in last read line)
