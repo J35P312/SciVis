@@ -8,17 +8,7 @@ SciVis is built on PySide and Python 3.
 ![Montage!](/Screenshots/Montage.png)
 
 # Installation
-Either try running one of the following binaries:
-
-Windows (10): https://github.com/akvpr/SciVis/releases/download/0.1.0/SciVis_Win10.zip
-
-OS X (10.11): https://github.com/akvpr/SciVis/releases/download/0.1.0/SciVis_osx.zip
-
-Note that the OS X release might be particularly wonky. Try running ./SciVis from terminal if the .app does not start.
-
-Linux (Debian Stretch): https://github.com/akvpr/SciVis/releases/download/0.1.0/SciVis_linux.zip
-
-Or install PySide and run app.py through python.
+install PySide and run app.py through python.
 
 #Settings
 User settings are located in the userSettings.conf file and can be customized either before running the program or during.
